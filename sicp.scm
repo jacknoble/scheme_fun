@@ -73,6 +73,8 @@
   (average guess (/ x guess)))
 (define (average x y)
   (/ (+ x y) 2))
+
+
 (define (good-enough? guess x)
   (< (abs (- (square guess) x)) 0.001))
 (define (sqroo x)
@@ -139,4 +141,115 @@
     0.001))
   (cube-rooter 1.0))
 
+;1.2
+(define (factorial num)
+  (if (= num 1)
+    1
+    (* num (factorial (- num 1)))))
+(define (other_factorial n)
+  (define (factoriter product counter)
+    (if (> counter n)
+      product
+      (factoriter
+        (* product counter)
+        (+ 1 counter))))
+  (factoriter 1 1))
+
+;Exercise 1.9
+
+(define (inc x)
+  (+ x 1))
+(define (dec x)
+  (- x 1))
+(define (plus a b) ; iterative process
+  (if (= a 0 )
+    b
+    (+ (dec a) (inc b))))
+(define (plus2 a b) ; recursive process
+  (if (= a 0)
+    b
+    (inc (+ (dec a) b))))
+; Exercise 1.10
+(define (A x y)
+  (cond ((= y 0) 0)
+        ((= x 0) (* y 2))
+        ((= y 1) 2)
+        (else (A (- x 1)
+                  (A x (- y 1))))))
+; (A 1 10) => 1024
+; (A 2 4) => 65536
+; (A 3 3) => 65536
+
+(define (double n) (A 0 n)) ; n * 2
+
+(define (two_to_the n) (A 1 n)) ; 2 ^ n
+
+(define (power_tower n) (A 2 n)) ; 2 ^ 2 ... n times
+
+(define (k n) (* 5 n n))
+
+(define (fibs n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (else
+          (+ (fibs (- n 1))
+             (fibs (- n 2))))))
+(define (fibsiter a b n)
+  (if (= 0 n)
+    b
+    (fibsiter (+ a b) a (- n 1))))
+(define (itfibs n)
+  (fibsiter 1 0 n))
+(define (concat . strings)
+  (apply string-append strings))
+(define (make-change amount)
+  (mc amount 5))
+(define (mc amount kinds-of-coins )
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (= kinds-of-coins 0)) 0)
+        (else (+  (mc amount
+                    (- kinds-of-coins 1))
+                  (mc (- amount
+                        (first-denom kinds-of-coins))
+                      kinds-of-coins )))))
+(define (first-denom kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+;Exercise 1.11
+(define (trip-fibs n) ; Recursive
+  (if (< n 3)
+    n
+    (+
+      (trip-fibs (- n 1))
+      (* 2 (trip-fibs (- n 2)))
+      (* 3 (trip-fibs (- n 3))))))
+(define (trifibs-iter a b c n)
+  (cond
+    ((= n 0) c)
+    ((= n 1) b)
+    ((= n 2) a)
+    (else (trifibs-iter (+ a (* 2 b) (* 3 c)) a b (- n 1)))))
+(define (it-trifibs num)
+  (trifibs-iter 2 1 0 num))
+; Exercise 1.12
+(define (pascal-tri row col)
+  (if (= 0 row)
+    (if (= col 0) 1 0)
+    (+
+      (pascal-tri (- row 1) (- col 1))
+      (pascal-tri (- row 1) col))))
+; Exercise 1.13
+(define (gold-fibs n)
+  (define golden-ratio (/ (+ 1 (sqrt 5)) 2))
+  (inexact->exact (round (/ (power golden-ratio n) (sqrt 5)))))
+
+(define (power num exp)
+  (exp-iter 1 num exp))
+(define (exp-iter product number counter)
+  (if (= counter 0)
+    product
+    (exp-iter (* product number) number (- counter 1))))
 
